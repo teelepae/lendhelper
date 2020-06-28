@@ -1,0 +1,53 @@
+
+<ion-header>
+  <ion-navbar #content color="clean">
+      <div class="item row">
+      <div align="left" class="col col-50 pb-0">
+      <img height="50px" src="assets/icon/logo.png"/>
+      </div>
+      <div align="right" class="col col-50 pb-0">
+      <ion-icon color="primary" name="settings" (click)="openSettingsPage()"></ion-icon> 
+      </div>
+      </div>
+  </ion-navbar>
+  <ion-searchbar [color]="clean" (ionInput)="getItems($event)"></ion-searchbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list padding-bottom>
+    <ion-item *ngFor="let note of notes | async" (click)="showDetails(note)">
+        <p align="right">{{note.date | timeAgo}}</p>
+      <div class="row">
+        <div class="col-6">
+        <div *ngIf="note.type === 'Loaned' ">
+         
+            <ion-icon  name="cash"  *ngIf="note.icon == 'Money'" class="book-icon-red"></ion-icon>
+    
+            <ion-icon name="cube" *ngIf="note.icon == 'Other'" class="book-icon-red"></ion-icon>
+
+        </div>
+        <div *ngIf="note.type === 'Borrowed' ">
+              <ion-icon name="cash"  *ngIf="note.icon == 'Money'" class="book-icon-blue"></ion-icon>
+              <ion-icon  *ngIf="note.icon == 'Other'" name="cube" class="book-icon-blue"></ion-icon>
+        </div>
+      </div>
+      <div padding-left padding-top class="col-6">
+        <h2 class="mb-0">{{note.descript}}</h2>
+        <div *ngIf="!note.descript">
+        <h2>{{note.amount}} {{this.currency}}</h2>
+        </div>
+        <div *ngIf="note.type === 'Loaned' ">
+          <p>was taken</p>
+        </div>
+        <div *ngIf="note.type === 'Borrowed' ">
+          <p>was given</p>
+        </div>
+      </div>
+      </div>
+      <h2 align="right">{{note.name}}</h2>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-fab right bottom>
+  <button ion-fab color="secondary" item-right [navPush]="AddNew"><ion-icon name="add"></ion-icon></button>
+</ion-fab>

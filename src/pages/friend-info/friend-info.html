@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-navbar  [color]="headerColor">
+    <div *ngIf="this.note == null">
+      <ion-title>
+        New note
+      </ion-title>
+    </div>
+    <div *ngIf="this.note != null">
+      <ion-title>{{this.note.name}}</ion-title>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form  [formGroup]="formGroup" (ngSubmit)="saveForm()">
+      <ion-item padding-top>
+          <ion-label>Name</ion-label>
+          <ion-input text-right type="text" disabled="{{madeBefore}}" formControlName="name" [ngModel] class="form-control" required></ion-input>
+        </ion-item>
+    <ion-row padding-left padding-right radio-group type="radio" formControlName="type" [ngModel] class="form-control" disabled="{{madeBefore}}">
+          <ion-col class="my-checkbox">
+              <ion-radio value="Borrowed"> </ion-radio>
+              <ion-label padding-left>I took</ion-label>
+          </ion-col>
+          <ion-col class="my-checkbox">
+          <ion-radio value="Loaned">
+          </ion-radio>
+          <ion-label padding-left>I gave</ion-label>
+          </ion-col>
+      </ion-row>
+    <ion-row padding-left padding-right radio-group type="radio" formControlName="icon" [ngModel] class="form-control" disabled="{{madeBefore}}">
+      <ion-col class="my-checkbox">
+          <ion-radio value="Money" (click)="descNotRequired()">
+          </ion-radio>
+          <ion-label padding-left>Money</ion-label>
+      </ion-col>
+      <ion-col class="my-checkbox">
+      <ion-radio value="Other" (click)="descRequired()">
+      </ion-radio>
+      <ion-label padding-left>Other</ion-label>
+      </ion-col>
+  </ion-row>
+  <div *ngIf="formGroup.get('icon').value == 'Money'">
+      <ion-item>
+          <ion-label>Description</ion-label>
+          <ion-input text-right type="text" placeholder="optional" disabled="{{madeBefore}}" formControlName="descript" [ngModel] class="form-control"></ion-input>
+        </ion-item>
+      <ion-item>
+          <ion-label>Amount</ion-label>
+          <ion-input text-right type="text" disabled="{{madeBefore}}" formControlName="amount" [ngModel] class="form-control"></ion-input>
+          <button item-right ion-button type="button" (click)="changeCurrency()">{{this.userCurrency}}</button>
+         </ion-item>
+  </div>
+  <div *ngIf="formGroup.get('icon').value == 'Other'">
+      <ion-item>
+          <ion-label>Description</ion-label>
+          <ion-input text-right type="text"  disabled="{{madeBefore}}" formControlName="descript" [ngModel] class="form-control" required></ion-input>
+        </ion-item>
+  </div>
+    <ion-item>
+        <ion-label>Date</ion-label>
+      <ion-datetime text-right type="date"  disabled="{{madeBefore}}"  displayFormat="DD-MM-YYYY" formControlName="date" [ngModel] [max]="maxDate" class="form-control"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="deadline">
+        <ion-label>Reminder</ion-label>
+      <ion-datetime placeholder="optional" disabled="{{madeBefore}}" [min]="minDate" displayFormat="DD-MM-YYYY" formControlName="notify" [ngModel] class="form-control"></ion-datetime>
+    </ion-item>
+    <div class="alert" *ngIf="formGroup.controls['name'].invalid"></div>
+    <div *ngIf="madeBefore == false">
+    <button margin-top="1em;" margin-left="1em;" ion-button type="submit" [disabled]="formGroup.invalid">Done</button>
+    </div>
+    <div *ngIf="madeBefore == true">
+      <ion-icon margin-top="1em;" margin-left="1em;" (click)="shareNote()" name="share"></ion-icon>
+      <ion-icon margin-top="1em;"  margin-left="1em;" (click)="madeBefore = false" name="create"></ion-icon>
+      <ion-icon margin-top="1em;"  margin-left="1em;" (click)="deleteItem()" name="trash"></ion-icon>
+    </div>
+  </form>
+</ion-content>

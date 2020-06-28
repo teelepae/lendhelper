@@ -1,0 +1,7 @@
+{
+  "name": "friendhelper",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
